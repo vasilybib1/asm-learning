@@ -1,9 +1,6 @@
 # PURPOSE: just simpel program that exits and returns a status code back to the linux kernel 
-
 # INPUT: none 
-
 # OUTPUT: returns a status code that can be viewed by typing 'echo $?' after program executes 
-
 # VARIABLES: 
 #   %eax holds the system call number 
 #   %ebx holds the return status 

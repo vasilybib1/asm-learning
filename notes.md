@@ -13,7 +13,7 @@ these are special purpose registers
 - %ebp
 - %esp
 - %eip
-- $eflags
+- %eflags
 
 ## Instructions 
 ~~~
