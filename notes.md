@@ -73,6 +73,14 @@ ADDRESS_OR_OFFSET(%BASE_OR_OFFSET, %INDEX, MULTIPLIER)
 # FINAL = ADDRESS_OR_OFFSET + BASE_OR_OFFSET + INDEX * MULTIPLIER
 ~~~
 
+## Stack and Functions 
+
+~~~
+movl %ebp, %esp
+popl %ebp
+ret
+~~~
+
 
 
 
