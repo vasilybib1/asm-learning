@@ -1,5 +1,4 @@
 .section .data
-  .lcomm buff, 500
 
 .section .text
 .globl _start
@@ -9,15 +8,16 @@ _start:
   # back up and initialize base pointer 
   # (this is for future to become a function)
 
-  subl $4, %esp
-  movl $0xA, %eax
-  movl %eax, (%ebp)
+  movl $0x0A474645, %eax
+  pushl %eax
+  movl $0x44434241, %eax
+  pushl %eax
   # store a new line character into the array (0xA)
 
   movl $4, %eax
   movl $1, %ebx
-  movl %ebp, %ecx
-  movl $1, %edx
+  movl %esp, %ecx
+  movl $8, %edx
   int $0x80 
   # load system call, fd number, pointer, len
   # and invoke the system call
