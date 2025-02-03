@@ -83,7 +83,13 @@ We can also print the first 40 words from the stack pointer like such
 ~~~
 x/40x $sp
 ~~~
-
+To show a step by step of the code we can use and then use next to step through it 
+~~~
+lay next
+next (step over)
+ref (refresh the visual)
+step (to enter the function)
+~~~
 
 
 
