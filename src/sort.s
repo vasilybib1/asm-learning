@@ -89,8 +89,7 @@ read_loop_end:
 
 #======================================================
 # PARSE FUNCTION
-# INPUTS (*converted_buffer, converted_buffer_size, 
-#   *data_buffer, data_buffer_size)
+# INPUTS (rb_len, *rb, db_len, *db)
 # PURPOSE: converts from a ascii list seperated by new 
 #   lines to a indexable array of longs 
 # PRE-REQ: data read from file needs to be ran through 
