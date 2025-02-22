@@ -126,6 +126,7 @@ read_loop_end:
   popl %eax
 
 br:
+  # debug
   movl $BUFF_DATA, %eax
 
   # exit with 0 error code

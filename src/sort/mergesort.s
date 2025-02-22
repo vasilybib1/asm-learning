@@ -56,9 +56,9 @@ mergesort_loop:
   popl %eax
 
   # call merge (first, mid, last)
-  movl ST_FIRST_INDEX(%ebp), %ebx
-  pushl %ebx
   subl $4, %eax
+  movl ST_FIRST_INDEX(%ebp), %ecx
+  pushl %ecx
   pushl %eax
   movl ST_LAST_INDEX(%ebp), %ebx
   pushl %ebx

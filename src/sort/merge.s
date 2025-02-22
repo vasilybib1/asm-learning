@@ -31,7 +31,7 @@ merge:
   movl ST__FIRST_INDEX(%ebp), %eax
   movl ST__MID_INDEX(%ebp), %ebx
   subl %eax, %ebx
-  addl $4, %ebx
+  # addl $4, %ebx
   movl %ebx, ST__LEFT_LEN(%ebp)
 
   # right len = last - mid
@@ -78,7 +78,7 @@ merge:
   # copy (mid+1 -> last) to right
   # end pointer because stack is reversed 
   movl ST__MID_INDEX(%ebp), %eax
-  addl $4, %eax
+  #addl $4, %eax
   pushl %eax
   movl ST__RIGHT_END(%ebp), %eax
   pushl %eax
@@ -148,7 +148,6 @@ combine:
   pushl %ebp
   movl %esp, %ebp
   subl $4, %esp
-  movl ST__ARR(%ebp), %eax # debug
   #function prologue end
 
   # set variables counters
@@ -179,6 +178,8 @@ combine_main_loop:
   # arr[ind] = right[j]
   movl ST__ARR(%ebp), %eax
   movl ST__ARR_INDEX(%ebp), %ebx
+  movl ST__RIGHT(%ebp), %ecx
+  movl (%ecx, %esi, 4), %edx
   movl %edx, (%eax, %ebx, 4)
   incl %esi
   incl %ebx
@@ -233,7 +234,6 @@ combine_right_loop:
   jmp combine_right_loop
 
 combine_end:
-  movl ST__ARR(%ebp), %eax #debug
   # function epilogue start
   addl $4, %esp
   movl %ebp, %esp
