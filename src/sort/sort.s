@@ -122,10 +122,6 @@ read_loop_end:
   call mergesort
   addl $12, %esp
 
-br:
-  # debug
-  movl $BUFF_DATA, %eax
-
   # exit with 0 error code
   movl $SYS_EXIT, %eax
   movl $0, %ebx
