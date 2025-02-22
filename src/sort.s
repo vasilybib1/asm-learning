@@ -27,6 +27,7 @@ parse_err_msg_end:
 .equ STDERR, 2
 # flags
 .equ O_RDONLY, 0
+.equ O_CREAT_WRONLY_TRUNC, 03101
 # sys stuff
 .equ LINUX_SYSCALL, 0x80
 .equ END_OF_FILE, 0
@@ -38,6 +39,9 @@ parse_err_msg_end:
 # for storing the values
 .equ BUFF_DATA_LEN, 400 # 400 / 4 is 100 entries
 .lcomm BUFF_DATA, BUFF_DATA_LEN
+# for temp storage when converting hex to ascii
+.equ BUFF_TEMP_LEN, 16
+.lcomm BUFF_TEMP, BUFF_TEMP_LEN
 
 .section .text
 .equ ST_SIZE_RESERVE, 12
@@ -56,7 +60,7 @@ _start:
   subl $ST_SIZE_RESERVE, %esp
 
 open_files:
-  # open and store fd
+  # open and store fd (in file)
   movl $SYS_OPEN, %eax
   movl ST_ARGV_1(%ebp), %ebx
   movl $O_RDONLY, %ecx
@@ -64,6 +68,15 @@ open_files:
   int $LINUX_SYSCALL
   movl %eax, ST_FD_IN(%ebp)
 
+  # open and store fd (out file)
+  movl $SYS_OPEN, %eax 
+  movl ST_ARGV_2(%ebp), %ebx
+  movl $O_CREAT_WRONLY_TRUNC, %ecx
+  movl $0666, %edx
+  int $LINUX_SYSCALL
+  movl %eax, ST_FD_OUT(%ebp)
+
+  # data buffer index (turns into size later) 
   movl $0, ST_DATA_TEMP_INDEX(%ebp)
 
 read_loop_begin:
@@ -122,8 +135,46 @@ read_loop_end:
   call mergesort
   addl $12, %esp
 
-br:
-  movl $BUFF_DATA, %eax
+  # set up counter 
+  movl $0, %edi
+
+write_loop_start:
+  # check if data buffer is empty
+  movl ST_DATA_TEMP_INDEX(%ebp), %eax
+  subl %edi, %eax
+  cmpl $0, %eax
+  je write_loop_end
+
+  # load arr[i]; i++
+  movl $BUFF_DATA, %ebx
+  movl (%ebx, %edi, 4), %eax
+  incl %edi
+  
+  # back up i
+  pushl %edi
+
+  # parse arr[i]
+  movl $BUFF_TEMP, %ecx
+  pushl %ecx
+  call hexToAscii
+  addl $4, %esp
+
+  # restore i
+  popl %edi
+
+  # call write on current buffer
+  movl %eax, %edx
+  movl $SYS_WRITE, %eax
+  movl ST_FD_OUT(%ebp), %ebx
+  movl $BUFF_TEMP, %ecx
+  int $LINUX_SYSCALL
+  jmp write_loop_start
+
+write_loop_end:
+  # close opened output file
+  movl $SYS_CLOSE, %eax
+  movl ST_FD_OUT(%ebp), %ebx
+  int $LINUX_SYSCALL
 
   # exit with 0 error code
   movl $SYS_EXIT, %eax
@@ -131,6 +182,11 @@ br:
   int $LINUX_SYSCALL
 
 convert_error:
+  # close opened read file
+  movl $SYS_CLOSE, %eax
+  movl ST_FD_IN(%ebp), %ebx
+  int $LINUX_SYSCALL
+
   # print the error msg
   movl $SYS_WRITE, %eax
   movl $STDERR, %ebx
@@ -140,6 +196,11 @@ convert_error:
   jmp err
 
 parse_error:
+  # close opened read file
+  movl $SYS_CLOSE, %eax
+  movl ST_FD_IN(%ebp), %ebx
+  int $LINUX_SYSCALL
+
   # print the error msg
   movl $SYS_WRITE, %eax
   movl $STDERR, %ebx

@@ -1,7 +1,7 @@
 OBJDIR = ./obj
 SRCDIR = ./src
 
-SRCS = parse sort convert mergesort merge copy combine sort
+SRCS = parse sort convert mergesort merge copy combine sort hexToAscii
 OBJS = $(addprefix $(OBJDIR)/, $(SRCS:=.o))
 TARGET = mergesort
 
