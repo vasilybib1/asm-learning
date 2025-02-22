@@ -108,14 +108,25 @@ read_loop_begin:
   jmp read_loop_begin
 
 read_loop_end:
-  # debug for now
-  movl $BUFF_READ, %eax # to REMOVE
-  movl $BUFF_DATA, %ebx # to REMOVE
-
   # close opened read file
   movl $SYS_CLOSE, %eax
   movl ST_FD_IN(%ebp), %ebx
   int $LINUX_SYSCALL
+
+  # call mergesort (first, last)
+  pushl $BUFF_DATA
+  movl $BUFF_DATA, %ecx # debug
+  movl ST_DATA_TEMP_INDEX(%ebp), %eax
+  movl $4, %edx
+  imull %edx, %eax
+  addl $BUFF_DATA, %eax
+  pushl %eax
+  call mergesort
+  popl %eax
+  popl %eax
+
+br:
+  movl $BUFF_DATA, %eax
 
   # exit with 0 error code
   movl $SYS_EXIT, %eax
