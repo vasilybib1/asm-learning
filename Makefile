@@ -1,5 +1,5 @@
 obj = ./obj
-src = ./src/sort
+src = ./src
 
 sort: parse.o sort.o convert.o mergesort.o merge.o copy.o combine.o
 	ld -m elf_i386 ${obj}/sort.o ${obj}/parse.o ${obj}/convert.o ${obj}/mergesort.o ${obj}/merge.o ${obj}/combine.o ${obj}/copy.o -o sort 
