@@ -113,17 +113,14 @@ read_loop_end:
   movl ST_FD_IN(%ebp), %ebx
   int $LINUX_SYSCALL
 
-  # call mergesort (first, last)
+  # call mergesort (*data, first, last)
   pushl $BUFF_DATA
-  movl $BUFF_DATA, %ecx # debug
+  pushl $0
   movl ST_DATA_TEMP_INDEX(%ebp), %eax
-  movl $4, %edx
-  imull %edx, %eax
-  addl $BUFF_DATA, %eax
+  decl %eax
   pushl %eax
   call mergesort
-  popl %eax
-  popl %eax
+  addl $12, %esp
 
 br:
   # debug
