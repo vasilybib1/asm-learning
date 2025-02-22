@@ -37,7 +37,7 @@ parse_err_msg_end:
 .equ BUFF_READ_LEN, 500
 .lcomm BUFF_READ, BUFF_READ_LEN
 # for storing the values
-.equ BUFF_DATA_LEN, 400 # 400 / 4 is 100 entries
+.equ BUFF_DATA_LEN, 4000 # 400 / 4 is 100 entries
 .lcomm BUFF_DATA, BUFF_DATA_LEN
 # for temp storage when converting hex to ascii
 .equ BUFF_TEMP_LEN, 16
