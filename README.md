@@ -1,11 +1,18 @@
-# ASM Learning 
+# Assembly Mergesort 
 
-This is just general Linux Assembly learning following the Programming From The Ground Up book.
+In this project I tried writing the famous mergesort algorithm in assembly to test my knowledge of assembly. In this project the program first reads a simple text file of ascii integers seperated by new lines. Parses it and saves it in an array of longs in a data buffer then runs mergesort on it and after writes the output to a new file given as an argument to the executable. 
 
-## To Run 
+## Compiling and Running 
 
-To run any of the programms written here you have to be on Linux 
+The host on which you compile the program must be a linux device. This program was written on arch linux and assembly code might or might not work on other distros. 
 
-## Development and Testing 
+~~~
+git clone git@github.com:vasilybib1/asm-mergesort.git
+cd asm-mergesort
+make
+mergesort someDataInFile someDataOutFile
+~~~
 
-All of this was written on Arch Linux and probably only works on that lol
+## Details About Project 
+
+will add later lol

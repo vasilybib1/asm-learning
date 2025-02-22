@@ -1,29 +1,22 @@
-obj = ./obj
-src = ./src
+OBJDIR = ./obj
+SRCDIR = ./src
 
-sort: parse.o sort.o convert.o mergesort.o merge.o copy.o combine.o
-	ld -m elf_i386 ${obj}/sort.o ${obj}/parse.o ${obj}/convert.o ${obj}/mergesort.o ${obj}/merge.o ${obj}/combine.o ${obj}/copy.o -o sort 
+SRCS = parse sort convert mergesort merge copy combine sort
+OBJS = $(addprefix $(OBJDIR)/, $(SRCS:=.o))
+TARGET = mergesort
 
-sort.o:
-	as ${src}/sort.s -o ${obj}/sort.o --32 -g
+all: $(TARGET)
 
-parse.o:
-	as ${src}/parse.s -o ${obj}/parse.o --32 -g
+$(TARGET): $(OBJS)
+	ld -m elf_i386 $^ -o $@
 
-convert.o:
-	as ${src}/convert.s -o ${obj}/convert.o --32 -g
+$(OBJDIR)/%.o: $(SRCDIR)/%.s | $(OBJDIR)
+	as $< -o $@ --32 -g 
 
-mergesort.o:
-	as ${src}/mergesort.s -o ${obj}/mergesort.o --32 -g
-
-merge.o:
-	as ${src}/merge.s -o ${obj}/merge.o --32 -g
-
-copy.o:
-	as ${src}/copy.s -o ${obj}/copy.o --32 -g
-
-combine.o:
-	as ${src}/combine.s -o ${obj}/combine.o --32 -g
+$(OBJDIR):
+	mkdir -p $(OBJDIR)
 
 clean: 
-	rm ${obj}/*.o; rm sort
+	rm -f $(OBJDIR)) $(TARGET)
+
+.PHONY: all clean
